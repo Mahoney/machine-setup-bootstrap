@@ -12,7 +12,12 @@ main() {
   echo "Setting up your mac using $git_repo"
   echo "==========================================="
 
-  pip install --user ansible
+  if ! command -v ansible-playbook; then
+    if ! command -v pip; then
+      curl https://bootstrap.pypa.io/get-pip.py | python
+    fi
+    pip install --user ansible
+  fi
 
   local installdir="/tmp/setupmac-$RANDOM"
 
