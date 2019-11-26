@@ -14,7 +14,7 @@ main() {
 
   if ! command -v ansible-playbook; then
     if ! command -v pip; then
-      curl https://bootstrap.pypa.io/get-pip.py | python
+      curl https://bootstrap.pypa.io/get-pip.py | python -s --user
     fi
     pip install --user ansible
   fi
