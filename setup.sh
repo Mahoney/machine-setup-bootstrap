@@ -17,7 +17,7 @@ main() {
       curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
       sudo /usr/bin/python /tmp/get-pip.py
     fi
-    pip install --user ansible
+    sudo pip install ansible
   fi
 
   local installdir="/tmp/setupmac-$RANDOM"
