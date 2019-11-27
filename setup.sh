@@ -12,6 +12,10 @@ main() {
   echo "Setting up your mac using $git_repo"
   echo "==========================================="
 
+  if ! xcode-select -p 1>/dev/null; then
+    xcode-select --install
+  fi
+
   if ! command -v ansible-playbook; then
     if ! command -v pip; then
       curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
@@ -20,18 +24,21 @@ main() {
     sudo pip install ansible
   fi
 
-  local installdir="/tmp/setupmac-$RANDOM"
+  local installdir="/tmp/setupmac"
 
-  mkdir "$installdir"
-
-  echo
-  echo "If asked for a password you may need to use an access token. You may have stored it in LastPass."
-  git clone "$git_repo" "$installdir"
+  echo "Cloning/Updating $git_repo into $installdir"
+  echo "If asked for a password you may need to use a GitHub access token. You may have stored it in LastPass."
+  if [ ! -d "$installdir" ]
+  then
+      git clone "$git_repo" "$installdir"
+  else
+      cd "$installdir"
+      git pull
+  fi
+  echo "Done cloning. From now on password requests will be for your local account."
 
   cd "$installdir"
   ansible-playbook -i ./hosts "$role.yml"
-
-  rm -Rfv "$installdir"
 
   echo "Setup done"
 
